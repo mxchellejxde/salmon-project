@@ -26,7 +26,20 @@ We will ensure the data story is clear, visually appealing, and easy to understa
 1. A US map that includes the 5 different types of salmon species and their geographic locations. Each species is differentiated by different color bubbles, and the size of the bubbles represent the total number of salmon that inhabit a specific coordinate.
 2. A bar graph that represents each salmon species' number of spawners over the years. Selecting the species in the dropdown will update the graph to reflect the selected salmon's spawners.
 3. A line graph that includes the 5 different types of salmon species and the number of spawners over the years
-4. 
+4. A map that shows the locations of the total hatchery salmon and wild salmon populations
+5. A line chart:
+   - There are five line charts, one for each species: Chinook, Chum, Coho, Sockeye, and Steelhead.
+   - Each line chart represents the trend of three variables over different brood years: Wild Salmon Total, Hatchery Salmon      Total, and Number Of Spawners.
+   - The line chart uses the Chart.js library to visualize the data.
+   - The data for each line chart is retrieved from the Flask application's endpoints /line/data/<species>.
+   - The line chart is drawn using the HTML canvas element with an ID based on the species name (myChart<Species>).
+ 6. A doughnut chart:
+    - There are five doughnut charts, one for each species: Chinook, Chum, Coho, Sockeye, and Steelhead.
+    - Each doughnut chart represents the population distribution of Wild Salmon and Hatchery Salmon for specific brood     -       years.
+    - The doughnut chart uses the Chart.js library to visualize the data.
+    - The data for each doughnut chart is retrieved from the Flask application's endpoints /doughnut/data/<species>.
+    - The doughnut chart is drawn using the HTML canvas element with an ID based on the species name (<species>Chart).
+7. 
 
 ## Process
 1. *Data Gathering*: 
