@@ -34,11 +34,11 @@ We will ensure the data story is clear, visually appealing, and easy to understa
 2. *Backend Development*:
    - Combining the dataset into a unified dataset
    - Select a database, `MongoDB`, to set up and store our dataset
-   - Create a Python Flask API for interacting with our database
+   - Create a `Python Flask API` for interacting with our database
    - Develop API endpoints for retrieving and manipulating the data
 3. *Frontend Development*:
-   - Create the HTML/CSS layout for the dashboard
-   - Implement JavaScript for frontend interactivity and data visualization
+   - Create the `HTML/CSS` layout for the dashboard
+   - Implement `JavaScript` for frontend interactivity and data visualization
 4. *Data Visualization*:
    - Design and implement a time series visualization to display population trends over time
    - Create a geographic distribution visualization using Leaflet
