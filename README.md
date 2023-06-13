@@ -14,6 +14,7 @@ We will ensure the data story is clear, visually appealing, and easy to understa
   - Import `CORS` from `flask_cors`
   - Import `MongoClient, errors` from `pymongo`
   - Import `json`  
+  - Import `logging`
 - HTML
 
 ## Data Sources
@@ -29,7 +30,7 @@ We will ensure the data story is clear, visually appealing, and easy to understa
 
 ## Process
 1. *Data Gathering*: 
-   - Access the data sources and extract into a CSV
+   - Access the data sources and extract into CSV files
    - Clean the data of missing values and unnecessary information
 2. *Backend Development*:
    - Combining the dataset into a unified dataset
