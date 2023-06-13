@@ -1,6 +1,4 @@
-# Salmon Project
-
-*Exploration of the salmon population through the years:*
+# Exploration of the Salmon Population Through the Years:
 
 ## Description
 
