@@ -39,7 +39,6 @@ We will ensure the data story is clear, visually appealing, and easy to understa
     - The doughnut chart uses the Chart.js library to visualize the data.
     - The data for each doughnut chart is retrieved from the Flask application's endpoints /doughnut/data/<species>.
     - The doughnut chart is drawn using the HTML canvas element with an ID based on the species name (<species>Chart).
-7. 
 
 ## Process
 1. *Data Gathering*: 
