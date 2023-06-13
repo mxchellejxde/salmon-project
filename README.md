@@ -20,7 +20,7 @@ We will ensure the data story is clear, visually appealing, and easy to understa
 ## Data Sources
 1. [The National Oceanic and Atmospheric Administration (NOAA) Fisheries Data](https://www.webapps.nwfsc.noaa.gov/apex/parrdata/inventory/tables/table/population_data_and_references_for_the_salmon_population_summary_sps_database): They maintain extensive data sets on fisheries, including salmon population numbers.
 2. [OpenWeather API](https://openweathermap.org/current): Collection of temperatures over time
-3. [](): Collection of the map coordinates
+3. [Flask GeoAPI](https://gis-ops.com/flask-geo-api-tutorial-powerful-geospatial-flask-explained/): Collection of the map coordinates
 
 ## Data Visualizations
 1. A US map that includes the 5 different types of salmon species and their geographic locations. Each species is differentiated by different color bubbles, and the size of the bubbles represent the total number of salmon that inhabit a specific coordinate.
@@ -64,7 +64,7 @@ We will ensure the data story is clear, visually appealing, and easy to understa
 ## Credits
 - [MJ](https://github.com/mxchellejxde)
 - [Nicole](https://github.com/Nicolemarie717) 
-- [Eli]()
+- [Eli](https://github.com/elitracewell)
 - [Michael](https://github.com/dibartm)
 
 
