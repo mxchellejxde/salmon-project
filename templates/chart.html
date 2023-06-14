@@ -1,0 +1,158 @@
+chart.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Salmon Populations</title>
+  <style>
+    canvas {
+      width: 600px !important;
+      height: 400px !important;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div>
+    <h2>Chinook</h2>
+    <canvas id="myChartChinook" class="myChart"></canvas>
+    <canvas id="chinookChart"></canvas>
+  </div>
+  <div>
+    <h2>Chum</h2>
+    <canvas id="myChartChum" class="myChart"></canvas>
+    <canvas id="chumChart"></canvas>
+  </div>
+  <div>
+    <h2>Coho</h2>
+    <canvas id="myChartCoho" class="myChart"></canvas>
+    <canvas id="cohoChart"></canvas>
+  </div>
+  <div>
+    <h2>Sockeye</h2>
+    <canvas id="myChartSockeye" class="myChart"></canvas>
+    <canvas id="sockeyeChart"></canvas>
+  </div>
+  <div>
+    <h2>Steelhead</h2>
+    <canvas id="myChartSteelhead" class="myChart"></canvas>
+    <canvas id="steelheadChart"></canvas>
+  </div>
+
+  <script>
+    function generateLineChart(species, chartId) {
+      axios.get(`/line/data/${species}`)
+        .then(response => {
+          const data = response.data;
+          const ctx = document.getElementById(chartId).getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.map(item => item['Brood Year']),
+              datasets: [{
+                label: 'Wild Salmon Total',
+                data: data.map(item => item['Wild Salmon Total']),
+                borderColor: 'rgb(75, 192, 192)',
+                fill: false
+              }, {
+                label: 'Hatchery Salmon Total',
+                data: data.map(item => item['Hatchery Salmon Total']),
+                borderColor: 'rgb(255, 99, 132)',
+                fill: false
+              }, {
+                label: 'Number Of Spawners',
+                data: data.map(item => item['Number Of Spawners']),
+                borderColor: 'rgb(153, 102, 255)',
+                fill: false
+              }]
+            },
+            options: {
+              responsive: true,
+              title: {
+                display: true,
+                text: `${species.charAt(0).toUpperCase() + species.slice(1)} Salmon Data`
+              },
+              scales: {
+                x: {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Brood Year'
+                  }
+                },
+                y: {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Value'
+                  }
+                }
+              }
+            }
+          });
+        });
+    }
+
+    function generateDoughnutChart(species, chartId) {
+      axios.get(`/doughnut/data/${species}`)
+        .then(function (response) {
+          const data = response.data.data;
+          const labels = ['Wild', 'Hatchery'];
+          let datasets = data.map((yearData, index) => {
+            const total = yearData['Wild Salmon Total'] + yearData['Hatchery Salmon Total'];
+            return {
+              label: `Year ${yearData['Brood Year']}`,
+              data: [yearData['Wild Salmon Total']/total * 100, yearData['Hatchery Salmon Total']/total * 100],
+              backgroundColor: ['#36A2EB', '#FF6384'],
+              hidden: false,
+            };
+          });
+
+          datasets = datasets.reverse();
+
+          const ctx = document.getElementById(chartId).getContext('2d');
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: labels,
+              datasets: datasets
+            },
+            options: {
+              responsive: true,
+              animation: {
+                animateScale: true,
+                animateRotate: true
+              },
+              title: {
+                display: true,
+                text: `${species.charAt(0).toUpperCase() + species.slice(1)} Population by Year`
+              },
+              tooltips: {
+                callbacks: {
+                  title: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem[0].datasetIndex].label;
+                  },
+                  label: function(tooltipItem, data) {
+                    const dataset = data.datasets[tooltipItem.datasetIndex];
+                    const currentValue = dataset.data[tooltipItem.index];
+                    return `${data.labels[tooltipItem.index]}: ${currentValue.toFixed(2)}%`;
+                  }
+                }
+              }
+            }
+          });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+
+    window.onload = function() {
+      ['chinook', 'chum', 'coho', 'sockeye', 'steelhead'].forEach(species => {
+        generateLineChart(species, `myChart${species.charAt(0).toUpperCase() + species.slice(1)}`);
+        generateDoughnutChart(species, `${species}Chart`);
+      });
+    };
+  </script>
+</body>
+</html>

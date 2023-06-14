@@ -1,0 +1,145 @@
+index.html
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Map Plotting</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 400px;
+    }
+
+    .chinook-option {
+      background-color: lightblue;
+    }
+
+    .chum-option {
+      background-color: lightgreen;
+    }
+
+    .coho-option {
+      background-color: lightyellow;
+    }
+
+    .sockeye-option {
+      background-color: lightpink;
+    }
+
+    .steelhead-option {
+      background-color: lightgrey;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  
+  <select id="tableDropdown">
+    <option value="Chinook" class="chinook-option">Chinook</option>
+    <option value="Chum" class="chum-option">Chum</option>
+    <option value="Coho" class="coho-option">Coho</option>
+    <option value="Sockeye" class="sockeye-option">Sockeye</option>
+    <option value="Steelhead" class="steelhead-option">Steelhead</option>
+  </select>
+
+  <div id="imageContainer"></div>
+
+  <script>
+    const imageDropdown = document.getElementById('tableDropdown');
+    const imageContainer = document.getElementById('imageContainer');
+
+    imageDropdown.addEventListener('change', function() {
+      const selectedTable = this.value;
+      const imageUrl = getImageUrl(selectedTable);
+      displayImage(imageUrl, selectedTable);
+    });
+
+    function getImageUrl(table) {
+      const imageUrls = {
+        'Chinook': 'https://www.fisheries.noaa.gov/s3/styles/original/s3/2022-10/640x427-Salmon-Chinook-NOAAFisheries.png?itok=FJ8ulCLO',
+        'Chum': 'https://www.fisheries.noaa.gov/s3/styles/original/s3/2022-10/640x427-Salmon-Chum-NOAAFisheries.png?itok=3pwhTe33',
+        'Coho': 'https://www.fisheries.noaa.gov/s3/styles/original/s3/2022-10/640x427-Salmon-Coho-NOAAFisheries.png?itok=96HmMKOh',
+        'Sockeye': 'https://www.fisheries.noaa.gov/s3/styles/original/s3/2022-09/640x427-Salmon-Sockeye-NOAAFisheries.png?itok=WxO3WErA',
+        'Steelhead': 'https://www.fisheries.noaa.gov/s3/styles/original/s3/dam-migration/640x427-steelhead-trout.png?itok=LLXZDCqN'
+      };
+
+      return imageUrls[table] || '';
+    }
+
+    function displayImage(imageUrl, table) {
+      // Clear the image container
+      imageContainer.innerHTML = '';
+
+      // Create an image element
+      const image = document.createElement('img');
+      image.src = imageUrl;
+      image.alt = table;
+
+      // Append the image to the container
+      imageContainer.appendChild(image);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+    // Create a Leaflet map
+    const map = L.map('map').setView([0, 0], 2); // Set initial coordinates and zoom level
+
+    // Add the OpenStreetMap tile layer to the map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // Fetch the JSON data
+    fetch('http://127.0.0.1:5000/data')
+      .then(response => response.json())
+      .then(data => {
+        // Process the received data
+        console.log(data);
+
+        // Access the different map tables
+        const tableDropdown = document.getElementById('tableDropdown');
+        const tableData = {
+          'Chinook': data.Chinook_map_table,
+          'Chum': data.Chum_map_table,
+          'Coho': data.Coho_map_table,
+          'Sockeye': data.Sockeye_map_table,
+          'Steelhead': data.Steelhead_map_table
+        };
+
+        // Update the map data based on the selected table
+        tableDropdown.addEventListener('change', function() {
+          const selectedTable = this.value;
+          const selectedData = tableData[selectedTable];
+          updateMapMarkers(selectedData);
+        });
+
+        // Function to update map markers
+        function updateMapMarkers(data) {
+          // Clear existing markers from the map
+          map.eachLayer(layer => {
+            if (layer instanceof L.Marker) {
+              map.removeLayer(layer);
+            }
+          });
+
+          // Loop through the data and plot markers on the map
+          for (const item of data) {
+            const latitude = parseFloat(item.Latitude);
+            const longitude = parseFloat(item.Longitude);
+
+            // Check if latitude and longitude are valid numbers
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+              // Create a marker and add it to the map
+              L.marker([latitude, longitude]).addTo(map);
+            }
+          }
+        }
+      })
+      .catch(error => {
+        // Handle any errors
+        console.error(error);
+      });
+  </script>
+</body>
+</html>

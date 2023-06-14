@@ -1,0 +1,318 @@
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Assessing West Coast Salmon Population Trends:</title>
+    <!-- Include any necessary CSS stylesheets -->
+    <link rel="stylesheet" type="text/css" href="">
+</head>
+<body>
+    <!-- Your page content here -->
+    <h1>Assessing West Coast Salmon Population Trends:</h1>
+    <!-- <script>
+    function populateDropdown() {
+        var dropdown = document.getElementById('dropdown');
+        var fishNames = ["Steelhead", "Sockeye", "Coho", "Chum", "Chinook"];
+
+        // Clear previous options
+        dropdown.innerHTML = "";
+
+        // Add new options
+        fishNames.forEach(function(fishName) {
+            var option = document.createElement("option");
+            option.text = fishName;
+            option.value = fishName;
+            dropdown.add(option);
+        });
+    }
+    </script> -->
+    <select id="dropdown" onchange="optionChanged()">
+      <option value="Steelhead">Steelhead</option>
+      <option value="Sockeye">Sockeye</option>
+      <option value="Coho">Coho</option>
+      <option value="Chum">Chum</option>
+      <option value="Chinook">Chinook</option>
+    </select>
+    <!-- <button onclick="populateDropdown()">Populate Dropdown</button> -->
+
+    <!-- Include any necessary JavaScript files -->
+
+    <div>
+  <canvas id="fishChart"></canvas>
+
+  <canvas id="allFishChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  
+  let fishData;
+  let yearObj = {};
+  let yearSet = new Set();
+  let graphYear = [];
+  let selectFishChart;
+  let steelheadTotal = [];
+  let cohoTotal = [];
+  let chumTotal = [];
+  let chinookTotal = [];
+  let sockeyeTotal = [];
+
+  function sortFishData(){
+
+    let cohoObj = {};
+    let steelheadObj = {};
+    let chumObj = {};
+    let sockeyeObj = {};
+    let chinookObj = {};
+    let yearArr = [];
+    let numOfSpawner = [];
+    console.log(fishData);
+    if(fishData){
+    fishData.forEach(fish => {
+      yearSet.add(fish['Brood Year'])
+
+      if(fish['Species'] === 'Coho'){
+        //let yearstream = fish['Brood Year'] + '$' + fish['Stream Name']
+
+        if(cohoObj[fish['Brood Year']]){
+          cohoObj[fish['Brood Year']] += fish['Number Of Spawners'];
+        } else {
+          cohoObj[fish['Brood Year']] = fish['Number Of Spawners'];
+        }
+      } else if(fish['Species'] === 'Sockeye'){
+        if(sockeyeObj[fish['Brood Year']]){
+          sockeyeObj[fish['Brood Year']] += fish['Number Of Spawners'];
+        } else {
+          sockeyeObj[fish['Brood Year']] = fish['Number Of Spawners'];
+        }
+      }else if(fish['Species'] === 'Chum'){
+        if(chumObj[fish['Brood Year']]){
+          chumObj[fish['Brood Year']] += fish['Number Of Spawners'];
+        } else {
+          chumObj[fish['Brood Year']] = fish['Number Of Spawners'];
+        }
+      }else if(fish['Species'] === 'Chinook'){
+        if(chinookObj[fish['Brood Year']]){
+          chinookObj[fish['Brood Year']] += fish['Number Of Spawners'];
+        } else {
+          chinookObj[fish['Brood Year']] = fish['Number Of Spawners'];
+        }
+      }else {
+        if(steelheadObj[fish['Brood Year']]){
+          steelheadObj[fish['Brood Year']] += fish['Number Of Spawners'];
+        } else {
+          steelheadObj[fish['Brood Year']] = fish['Number Of Spawners'];
+        }
+      }
+
+    })
+
+    const ctx = document.getElementById('fishChart');
+    const allFishCanvas = document.getElementById('allFishChart');
+
+    graphYear = Array.from(yearSet);
+    graphYear.sort(function(a, b) {
+      return a - b;
+    });
+
+    graphYear.forEach(year => {
+      if(sockeyeObj[year]){
+        sockeyeTotal.push(sockeyeObj[year])
+      } else {
+        sockeyeTotal.push(0)
+      }
+      if(chinookObj[year]){
+        chinookTotal.push(chinookObj[year])
+      } else {
+        chinookTotal.push(0)
+      }
+      if(chumObj[year]){
+        chumTotal.push(chumObj[year])
+      } else {
+        chumTotal.push(0)
+      }
+      if(steelheadObj[year]){
+        steelheadTotal.push(steelheadObj[year])
+      } else {
+        steelheadTotal.push(0)
+      }
+      if(cohoObj[year]){
+        cohoTotal.push(cohoObj[year])
+      } else {
+        cohoTotal.push(0)
+      }
+    })
+
+    console.log(graphYear);
+
+    const allFishData = {
+      labels: graphYear,
+      datasets: [
+        {
+          label: 'Steelhead',
+          data: steelheadTotal,
+          borderColor: 'red',
+          backgroundColor: 'red',
+          yAxisID: 'Coho',
+        },
+        {
+          label: 'Sockeye',
+          data: sockeyeTotal,
+          borderColor: 'blue',
+          backgroundColor: 'blue',
+          yAxisID: 'Coho',
+        },
+        {
+          label: 'Coho',
+          data: cohoTotal,
+          borderColor: 'green',
+          backgroundColor: 'green',
+          yAxisID: 'Coho',
+        },
+        {
+          label: 'Chum',
+          data: chumTotal,
+          borderColor: 'orange',
+          backgroundColor: 'orange',
+          yAxisID: 'Coho',
+        },
+        {
+          label: 'Chinook',
+          data: chinookTotal,
+          borderColor: 'pink',
+          backgroundColor: 'pink',
+          yAxisID: 'Coho',
+        }
+      ]
+    };
+
+
+    selectFishChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: graphYear,
+        datasets: [{
+          label: '# of Spawners',
+          data: steelheadTotal,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    new Chart(allFishCanvas, {
+      type: 'line',
+      data: allFishData,
+      options: {
+        responsive: true,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        stacked: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Chart.js Line Chart - Multi Axis'
+          }
+        },
+        scales: {
+          /*Steelhead: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+          },
+          Sockeye: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+          },
+          Coho: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+          },
+          Chum: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+          },
+          Chinook: {
+            type: 'linear',
+            display: true,
+            position: 'right',                            
+            // grid line settings
+            grid: {
+              drawOnChartArea: false, // only want the grid lines for one axis to show up
+            },
+          },*/
+          Coho: {
+            type: 'linear',
+            display: true,
+            position: 'left',                            
+            // grid line settings
+            grid: {
+              drawOnChartArea: false, // only want the grid lines for one axis to show up
+            },
+          },
+        }
+      },
+    });
+  }
+  }
+
+  function getData(){
+    const url = "http://127.0.0.1:5000/salmonData";
+    fetch(url)
+    .then(res => res.json())
+    .catch(function(error){
+      console.log(error)
+    })
+    .then(data => {
+      console.table(data)
+      fishData = data;
+      sortFishData();
+    })
+  }
+
+  getData();
+
+  function updateFishChart(fishName){
+    
+    let selectedFishTotal;
+
+    if(fishName === 'Coho'){
+      selectedFishTotal = cohoTotal;
+    } else if(fishName === 'Steelhead'){
+      selectedFishTotal = steelheadTotal;
+    } else if(fishName === 'Chum'){
+      selectedFishTotal = chumTotal;
+    } else if(fishName === 'Sockeye'){
+      selectedFishTotal = sockeyeTotal;
+    } else if(fishName === 'Chinook'){
+      selectedFishTotal = chinookTotal;
+    }
+    
+    selectFishChart.data.labels = graphYear;
+    selectFishChart.data.datasets[0].data = selectedFishTotal;
+    selectFishChart.update();
+
+  }
+
+
+  function optionChanged(e){
+    let fish = document.getElementById('dropdown').value;
+    console.log(fish);
+    console.log(fishData);
+    updateFishChart(fish);
+  }
+
+</script>
+</body>
+</html>
