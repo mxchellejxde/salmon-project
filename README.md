@@ -1,7 +1,7 @@
 # Exploration of the Salmon Population Through the Years:
 
 ## Description
-The aim of our project is to explore and visualize the trends and factors impacting the salmon population on the West Coast. We aim to investigate relationships between population changes over time, locations with higher or lower population densities, the impact of environmental factors like water temperature or pollution, and other related correlations that may emerge from the data.
+The aim of our project is to explore and visualize the trends and factors impacting the salmon population on the West Coast. We aim to investigate relationships between population changes over time, locations with higher or lower population densities, and other related correlations that may emerge from the data.
 
 For this project, we were required to create visualizations with a Python Flask-powered API, HTML/CSS, JavaScript, and at least one database (SQL, MongoDB, SQLite, etc.). User-driven interaction will be a key feature of our visualization, with interactive elements such as dropdowns to select a specific species or year, and textboxes for searching specific locations. Our final visualization will ideally present at least three different views of the data, such as temporal trends, geographical distribution, and environmental correlations.
 
@@ -19,8 +19,7 @@ We will ensure the data story is clear, visually appealing, and easy to understa
 
 ## Data Sources
 1. [The National Oceanic and Atmospheric Administration (NOAA) Fisheries Data](https://www.webapps.nwfsc.noaa.gov/apex/parrdata/inventory/tables/table/population_data_and_references_for_the_salmon_population_summary_sps_database): They maintain extensive data sets on fisheries, including salmon population numbers.
-2. [OpenWeather API](https://openweathermap.org/current): Collection of temperatures over time
-3. [Flask GeoAPI](https://gis-ops.com/flask-geo-api-tutorial-powerful-geospatial-flask-explained/): Collection of the map coordinates
+2. [Flask GeoAPI](https://gis-ops.com/flask-geo-api-tutorial-powerful-geospatial-flask-explained/): Collection of the map coordinates
 
 ## Data Visualizations
 1. A US map that includes the 5 different types of salmon species and their geographic locations. Each species is differentiated by different color bubbles, and the size of the bubbles represent the total number of salmon that inhabit a specific coordinate.
@@ -65,5 +64,3 @@ We will ensure the data story is clear, visually appealing, and easy to understa
 - [Nicole](https://github.com/Nicolemarie717) 
 - [Eli](https://github.com/elitracewell)
 - [Michael](https://github.com/dibartm)
-
-
